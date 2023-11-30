@@ -3,6 +3,7 @@
 AccelStepper stepper(1, 8, 9);  // Paso a paso en el pin 8, dirección en el pin 9
 long currentPosition = 0;  // Variable para almacenar la posición actual en grados
 long currentSteps = 0; // Variable para almacenar la posición actual en pasos
+const int MAX_ANGLE = 120;  // Límite de seguridad en grados
 
 const int endstopPin = 10;  // Pin del final de carrera
 
@@ -52,6 +53,11 @@ void handle_command(String command) {
     if (delimiter_index != -1) {
       long targetAngle = command.substring(0, delimiter_index).toInt();
       long speed = command.substring(delimiter_index + 1).toInt();
+
+      if (targetAngle > MAX_ANGLE) {
+        Serial.println("Error: Ángulo objetivo excede el límite de seguridad.");
+        return;
+      }
 
       Serial.print("Ángulo origen: ");
       Serial.println(currentPosition);
@@ -120,8 +126,8 @@ void get_current_position() {
 void calibrate_motor() {
   Serial.println("Iniciando calibración...");
 
-  stepper.setSpeed(-50);  // Velocidad negativa para moverse hacia atrás
-  stepper.moveTo(-1000000);  // Un valor grande para asegurar que se mueva lo suficiente
+  stepper.setSpeed(-1);  // Velocidad negativa para moverse hacia atrás
+  stepper.moveTo(-4334);  // Un valor grande para asegurar que se mueva lo suficiente, equivalente a -120 grados
 
   while (digitalRead(endstopPin) == HIGH && stepper.distanceToGo() != 0) {
     stepper.run();
