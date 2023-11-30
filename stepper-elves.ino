@@ -1,4 +1,5 @@
 #include <AccelStepper.h>
+#include <DHT.h>
 
 AccelStepper stepper(1, 8, 9);  // Paso a paso en el pin 8, dirección en el pin 9
 long currentPosition = 0;  // Variable para almacenar la posición actual en grados
@@ -6,13 +7,21 @@ long currentSteps = 0; // Variable para almacenar la posición actual en pasos
 const int MAX_ANGLE = 120;  // Límite de seguridad en grados
 
 const int endstopPin = 10;  // Pin del final de carrera
+const int analogPin = A0;  // Pin analógico para la lectura de batería
+const int dhtPin = 7;      // Pin de datos del sensor DHT22
+
+DHT dht(dhtPin, DHT22);
 
 void setup() {
   pinMode(endstopPin, INPUT_PULLUP);
 
   Serial.begin(9600);
+  
   stepper.setMaxSpeed(1000);
   stepper.setAcceleration(500);
+
+  dht.begin();
+
   Serial.println("Inicialización completada. Esperando comandos...");
 }
 
@@ -44,6 +53,18 @@ void handle_command(String command) {
     // Comando de calibración
     if (command.startsWith("*CALIBRATE*")) {
       calibrate_motor();
+      return;
+    }
+
+    // Comando para leer el valor de la batería
+    if (command.startsWith("*READBATTERY*")) {
+      read_battery();
+      return;
+    }
+
+    // Comando para leer temperatura y humedad
+    if (command.startsWith("*READTEMP*")) {
+      read_temperature_humidity();
       return;
     }
 
@@ -140,4 +161,21 @@ void calibrate_motor() {
   set_zero_position(); // Establecer la posición actual como cero
   
   Serial.println("Calibración completa.");
+}
+
+void read_battery() {
+  int batteryValue = analogRead(analogPin);
+  Serial.print("Nivel de batería: ");
+  Serial.println(batteryValue);
+}
+
+void read_temperature_humidity() {
+  float temperature = dht.readTemperature();
+  float humidity = dht.readHumidity();
+
+  Serial.print("Temperatura: ");
+  Serial.print(temperature);
+  Serial.print("°C, Humedad: ");
+  Serial.print(humidity);
+  Serial.println("%");
 }
