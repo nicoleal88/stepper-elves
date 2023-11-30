@@ -22,7 +22,7 @@ void setup() {
 
   dht.begin();
 
-  Serial.println("Inicialización completada. Esperando comandos...");
+  // Serial.println("Inicialización completada. Esperando comandos...");
 }
 
 void loop() {
