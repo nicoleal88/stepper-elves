@@ -22,9 +22,6 @@ def recibir_resultado():
 
 # Bucle principal
 while True:
-    # Espera y recibe el resultado del Arduino
-    recibir_resultado()
-
 
     # Entrada del usuario
     comando = input("\nIntroduce el comando (o 'exit' para salir): ")
@@ -35,6 +32,8 @@ while True:
     # Envía el comando al Arduino
     enviar_comando(comando)
 
+    # Espera y recibe el resultado del Arduino
+    recibir_resultado()
 
 # Cierra la conexión al puerto serie
 ser.close()

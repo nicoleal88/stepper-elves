@@ -10,6 +10,8 @@ const int endstopPin = 10;  // Pin del final de carrera
 const int analogPin = A0;  // Pin analógico para la lectura de batería
 const int dhtPin = 7;      // Pin de datos del sensor DHT22
 
+const float factorVoltaje = 0.2;
+
 DHT dht(dhtPin, DHT22);
 
 void setup() {
@@ -166,7 +168,7 @@ void calibrate_motor() {
 void read_battery() {
   int batteryValue = analogRead(analogPin);
   Serial.print("Nivel de batería: ");
-  Serial.println(batteryValue);
+  Serial.println(batteryValue*factorVoltaje);
 }
 
 void read_temperature_humidity() {
