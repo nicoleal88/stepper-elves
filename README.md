@@ -39,10 +39,3 @@ Este proyecto permite controlar un motor paso a paso usando un Arduino y una lib
 ## Límite de Seguridad
 
 El código incluye un límite de seguridad `MAX_ANGLE` para evitar movimientos que excedan este límite. Si un comando especifica un ángulo mayor a `MAX_ANGLE`, se imprimirá un error y el movimiento será rechazado.
-
-## Contribuciones
-
-Si encuentras problemas o mejoras, siéntete libre de abrir un problema o enviar una solicitud de extracción.
-
-¡Diviértete experimentando con tu motor paso a paso!
-
