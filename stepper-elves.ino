@@ -10,7 +10,9 @@ const int endstopPin = 10;  // Pin del final de carrera
 const int analogPin = A0;  // Pin analógico para la lectura de batería
 const int dhtPin = 7;      // Pin de datos del sensor DHT22
 
-const float factorVoltaje = 0.2;
+const float factorVoltaje = 1;
+
+
 
 DHT dht(dhtPin, DHT22);
 
@@ -25,6 +27,7 @@ void setup() {
   dht.begin();
 
   Serial.println("Inicialización completada. Esperando comandos...");
+  Serial.println("#####");
 }
 
 void loop() {
@@ -38,7 +41,7 @@ void loop() {
 
 void handle_command(String command) {
   if (command.startsWith("*")) {
-    Serial.println("Formato de comando correcto.");
+    // Serial.println("Formato de comando correcto.");
 
     // El comando sigue el formato *ANGULO-VELOCIDAD*
     if (command.startsWith("*SETZERO*")) {
@@ -79,6 +82,7 @@ void handle_command(String command) {
 
       if (targetAngle > MAX_ANGLE) {
         Serial.println("Error: Ángulo objetivo excede el límite de seguridad.");
+        Serial.println("#####");
         return;
       }
 
@@ -93,6 +97,7 @@ void handle_command(String command) {
     }
   } else {
     Serial.println("Formato de comando incorrecto.");
+    Serial.println("#####");
   }
 }
 
@@ -104,10 +109,10 @@ void move_stepper(long targetAngle, long speed) {
   stepper.setSpeed(angleDifference > 0 ? speed : -speed);
 
   // Calcular pasos necesarios para mover al ángulo destino desde la posición actual
-  // 64 vuentas sinfin = 1 vuelta montura
-  // 64 vuentas sinfin = 360 ° montura
-  // 64 vuentas motor = 360 ° montura
-  // 64*200 pasos motor = 360 ° montura
+  // 65 vuentas sinfin = 1 vuelta montura
+  // 65 vuentas sinfin = 360 ° montura
+  // 65 vuentas motor = 360 ° montura
+  // 65*200 pasos motor = 360 ° montura
   
   // Para probar el motor solo:
   // long steps = (angleDifference) * 200 / 360;  // Suponiendo motor con 200 pasos por vuelta
@@ -132,6 +137,8 @@ void move_stepper(long targetAngle, long speed) {
 
   Serial.print("Se llegó a destino. Nueva posición: ");
   Serial.println(currentPosition);
+  Serial.println("#####");
+
 }
 
 void set_zero_position() {
@@ -139,11 +146,13 @@ void set_zero_position() {
   currentSteps = 0;
   
   Serial.println("Posición actual establecida como cero.");
+  Serial.println("#####");
 }
 
 void get_current_position() {
   Serial.print("Posición actual: ");
   Serial.println(currentPosition);
+  Serial.println("#####");
 }
 
 void calibrate_motor() {
@@ -173,12 +182,14 @@ void calibrate_motor() {
   set_zero_position(); // Establecer la posición actual como cero
   
   Serial.println("Calibración completa.");
+  Serial.println("#####");
 }
 
 void read_battery() {
   int batteryValue = analogRead(analogPin);
   Serial.print("Nivel de batería: ");
   Serial.println(batteryValue*factorVoltaje);
+  Serial.println("#####");
 }
 
 void read_temperature_humidity() {
@@ -190,4 +201,5 @@ void read_temperature_humidity() {
   Serial.print("°C, Humedad: ");
   Serial.print(humidity);
   Serial.println("%");
+  Serial.println("#####");
 }
