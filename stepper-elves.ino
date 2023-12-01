@@ -158,8 +158,18 @@ void calibrate_motor() {
 
   stepper.stop();  // Detener el motor cuando se toque el final de carrera
   
-  stepper.setCurrentPosition(0);
+  Serial.println("Fin de carrera pulsado");
+
+  stepper.setCurrentPosition(-85);
+  currentPosition = -85;
+  currentSteps = 0;
   
+  Serial.println("Posición seteada a -85° ");
+
+  Serial.println("Regresando a posición cero...");
+
+  move_stepper(0, 1); // Mover a posición cero, velocidad 1
+
   set_zero_position(); // Establecer la posición actual como cero
   
   Serial.println("Calibración completa.");
