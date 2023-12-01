@@ -3,7 +3,7 @@ import serial
 # Configuración del puerto serie
 port = "/dev/ttyACM0"  # Cambia esto al puerto serie correcto
 baudrate = 9600
-
+# inicio = True
 # Abre la conexión al puerto serie
 ser = serial.Serial(port, baudrate, timeout=1)
 
@@ -17,14 +17,16 @@ def recibir_resultado():
         resultado = ser.readline().decode().strip()
         print("Resultado:", resultado)
 
-
-# recibir_resultado()
-
 # Bucle principal
 while True:
-
+    # if inicio:
+    #     print("Loop inicial")
+    #     # Limpia el buffer serial antes de enviar el comando
+    #     ser.reset_input_buffer()
+    #     ser.reset_output_buffer()
+    #     inicio = False
     # Entrada del usuario
-    comando = input("\nIntroduce el comando (o 'exit' para salir): ")
+    comando = input("Introduce el comando (o 'exit' para salir): ")
 
     if comando.lower() == 'exit':
         break  # Sal del bucle si el usuario escribe 'exit'
