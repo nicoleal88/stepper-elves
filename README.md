@@ -32,7 +32,7 @@ Este proyecto permite controlar un motor paso a paso usando un Arduino y una lib
    - `*READBATTERY*`: Lee el nivel de batería del pin analógico.
    - `*READTEMP*`: Lee la temperatura y humedad del sensor DHT22.
 
-### Ejemplos de comandos:
+### Ejemplos de comandos
 
 - `*45-50*`: Mueve el motor al ángulo 45 a una velocidad de 50.
 - `*SETZERO*`: Establece la posición actual como cero.
@@ -46,3 +46,7 @@ Este proyecto permite controlar un motor paso a paso usando un Arduino y una lib
 ## Límite de Seguridad
 
 El código incluye un límite de seguridad `MAX_ANGLE` para evitar movimientos que excedan este límite. Si un comando especifica un ángulo mayor a `MAX_ANGLE`, se imprimirá un error y el movimiento será rechazado.
+
+## Modelos 3den OnShape
+
+Los modelos 3d se encuentran en el [link](https://cad.onshape.com/documents/a62f93ff7ced747f6bff1457/w/5efe87a3af445a6ccf31b3ad/e/480793982d3c0177615028ab?renderMode=0&uiState=656f6fc1e612372fc7774d9d)
