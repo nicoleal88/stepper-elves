@@ -1,20 +1,30 @@
+// Librerias
 #include <AccelStepper.h>
 #include <DHT.h>
+#include <Servo.h>
 
-AccelStepper stepper(1, 8, 9);  // Paso a paso en el pin 8, dirección en el pin 9
+// Variables
 long currentPosition = 0;  // Variable para almacenar la posición actual en grados
 long currentSteps = 0; // Variable para almacenar la posición actual en pasos
-const int MAX_ANGLE = 120;  // Límite de seguridad en grados
 
-const int endstopPin = 10;  // Pin del final de carrera
+//Pines
 const int analogPin = A0;  // Pin analógico para la lectura de batería
+const int pinServo = 6;    // Pin del servo
 const int dhtPin = 7;      // Pin de datos del sensor DHT22
+const int stepPin = 8;      // Pin del step del driver A4988
+const int dirPin = 9;      // Pin del step del driver A4988
+const int endstopPin = 10;  // Pin del final de carrera
 
-const float factorVoltaje = 1;
+// Constantes
+const int MAX_ANGLE = 120;  // Límite de seguridad en grados
+const float factorVoltaje = 1; // Factor de conversión ADC->voltaje
+const int servoOnAngle = 60;  // Angulo para servo ON
+const int servoOffAngle = 30;   // Angulo para servo OFF
 
-
-
+//Objetos
+AccelStepper stepper(1, stepPin, dirPin);  // Paso a paso en el pin 8, dirección en el pin 9
 DHT dht(dhtPin, DHT22);
+Servo miServo;
 
 void setup() {
   pinMode(endstopPin, INPUT_PULLUP);
@@ -23,7 +33,8 @@ void setup() {
   
   stepper.setMaxSpeed(1000);
   stepper.setAcceleration(500);
-
+  
+  miServo.attach(pinServo);  // El pin del servo
   dht.begin();
 
   Serial.println("Inicialización completada. Esperando comandos...");
@@ -70,6 +81,18 @@ void handle_command(String command) {
     // Comando para leer temperatura y humedad
     if (command.startsWith("*READTEMP*")) {
       read_temperature_humidity();
+      return;
+    }
+
+    // Comando para colocar servo en posición ON
+    if (command.startsWith("*SERVO-ON*")) {
+      servoOn();
+      return;
+    }
+
+    // Comando para colocar servo en posición OFF
+    if (command.startsWith("*SERVO-OFF*")) {
+      servoOff();
       return;
     }
 
@@ -168,11 +191,20 @@ void calibrate_motor() {
   stepper.stop();  // Detener el motor cuando se toque el final de carrera
   
   Serial.println("Fin de carrera pulsado");
-
+  Serial.print("current position: ");
+  Serial.println(currentPosition);
+  Serial.print("current steps: ");
+  Serial.println(currentSteps);
+  
   stepper.setCurrentPosition(-85);
   currentPosition = -85;
   currentSteps = 0;
   
+  Serial.print("current position: ");
+  Serial.println(currentPosition);
+  Serial.print("current steps: ");
+  Serial.println(currentSteps);
+
   Serial.println("Posición seteada a -85° ");
 
   Serial.println("Regresando a posición cero...");
@@ -181,6 +213,11 @@ void calibrate_motor() {
 
   set_zero_position(); // Establecer la posición actual como cero
   
+  Serial.print("current position: ");
+  Serial.println(currentPosition);
+  Serial.print("current steps: ");
+  Serial.println(currentSteps);
+
   Serial.println("Calibración completa.");
   Serial.println("#####");
 }
@@ -201,5 +238,17 @@ void read_temperature_humidity() {
   Serial.print("°C, Humedad: ");
   Serial.print(humidity);
   Serial.println("%");
+  Serial.println("#####");
+}
+
+void servoOn() {
+  miServo.write(servoOnAngle);
+  Serial.println("Servo en posición ON");
+  Serial.println("#####");
+}
+
+void servoOff() {
+  miServo.write(servoOffAngle);
+  Serial.println("Servo en posición OFF");
   Serial.println("#####");
 }
