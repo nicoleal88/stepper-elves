@@ -9,6 +9,10 @@
 
 - DHT22
 
+## Andres Travaini
+
+- ...
+
 ## N. Leal
 
 - Protoboard

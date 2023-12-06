@@ -16,7 +16,7 @@ const int dirPin = 9;      // Pin del step del driver A4988
 const int endstopPin = 10;  // Pin del final de carrera
 
 // Constantes
-const int MAX_ANGLE = 120;  // Límite de seguridad en grados
+const int MAX_ANGLE = 210;  // Límite de seguridad en grados
 const float factorVoltaje = 1; // Factor de conversión ADC->voltaje
 const int servoOnAngle = 60;  // Angulo para servo ON
 const int servoOffAngle = 30;   // Angulo para servo OFF
@@ -138,7 +138,8 @@ void move_stepper(long targetAngle, long speed) {
   // 65*200 pasos motor = 360 ° montura
   
   // Para probar el motor solo:
-  // long steps = (angleDifference) * 200 / 360;  // Suponiendo motor con 200 pasos por vuelta
+  // long steps = (angleDifference) * 50 / 360;  // Suponiendo motor con 200 pasos por vuelta
+  // long steps = (angleDifference) * 48 * 32 / 360;  // Suponiendo motor con 50 pasos por vuelta
   // Para probar la montura
   long steps = (angleDifference) * 200 * 65 / 360;  // Suponiendo motor con 200 pasos por vuelta
 
@@ -165,6 +166,7 @@ void move_stepper(long targetAngle, long speed) {
 }
 
 void set_zero_position() {
+  stepper.setCurrentPosition(0);
   currentPosition = 0;
   currentSteps = 0;
   
@@ -182,7 +184,7 @@ void calibrate_motor() {
   Serial.println("Iniciando calibración...");
 
   stepper.setSpeed(-1);  // Velocidad negativa para moverse hacia atrás
-  stepper.moveTo(-4334);  // Un valor grande para asegurar que se mueva lo suficiente, equivalente a -120 grados
+  stepper.moveTo(-7584);  // Un valor grande para asegurar que se mueva lo suficiente, equivalente a -210 grados
 
   while (digitalRead(endstopPin) == HIGH && stepper.distanceToGo() != 0) {
     stepper.run();
