@@ -18,8 +18,8 @@ const int endstopPin = 10;  // Pin del final de carrera
 // Constantes
 const int MAX_ANGLE = 210;  // Límite de seguridad en grados
 const float factorVoltaje = 1; // Factor de conversión ADC->voltaje
-const int servoOnAngle = 60;  // Angulo para servo ON
-const int servoOffAngle = 30;   // Angulo para servo OFF
+const int servoOnAngle = 25;  // Angulo para servo ON
+const int servoOffAngle = 0;   // Angulo para servo OFF
 
 //Objetos
 AccelStepper stepper(1, stepPin, dirPin);  // Paso a paso en el pin 8, dirección en el pin 9
@@ -35,6 +35,7 @@ void setup() {
   stepper.setAcceleration(500);
   
   miServo.attach(pinServo);  // El pin del servo
+  miServo.write(0);
   dht.begin();
 
   Serial.println("Inicialización completada. Esperando comandos...");
