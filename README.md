@@ -2,51 +2,56 @@
 
 Este proyecto permite controlar un motor paso a paso usando un Arduino y una librería AccelStepper. Puedes enviar comandos a través del puerto serie para mover el motor a posiciones específicas, realizar calibraciones y más.
 
-## Requisitos
+## Librerías
 
-- Arduino
-- Motor paso a paso bipolar
-- Driver A4988 o similar
-- Sensor de final de carrera
-- Sensor DHT22 para la medición de temperatura y humedad
-- Librería AccelStepper (instalable desde el Administrador de bibliotecas de Arduino IDE)
-- Librería DHT (instalable desde el Administrador de bibliotecas de Arduino IDE)
+- [AccelStepper](https://www.arduino.cc/reference/en/libraries/accelstepper/): Para el control del motor paso a paso.
+- [DHT](https://www.arduino.cc/reference/en/libraries/dht-sensor-library/): Para la lectura del sensor DHT22.
+- [Servo](https://www.arduino.cc/reference/en/libraries/servo/): Para el control del servo.
 
-## Conexiones
+## Pines y Constantes
 
-- Conecta el motor al pin 8 (paso) y 9 (dirección) del Arduino.
-- Conecta una pata del sensor de final de carrera al pin 10 del Arduino, y la otra a GND (Usando el modo Normal Abierto).
-- Conecta el sensor DHT22 (Pata 1 a VCC, pata 2 a pin 7, pata 3 desconectada, pata 4 a GND)
-- Asegúrate de tener la alimentación adecuada para el motor y los elementos de control.
+### Pines
 
-## Uso
+- `analogPin` (A0): Pin analógico para la lectura de batería
+- `pinServo` (6): Pin del servo
+- `dhtPin` (7): Pin de datos del sensor DHT22
+- `stepPin` (8): Pin del paso del driver A4988
+- `dirPin` (9): Pin de dirección del driver A4988
+- `endstopPin` (10): Pin del final de carrera
 
-1. Carga el código en el Arduino utilizando el Arduino IDE.
-2. Abre el monitor serie en el Arduino IDE para enviar comandos.
-3. Utiliza los siguientes comandos:
+## Constantes
 
-   - `*ANGULO-VELOCIDAD*`: Mueve el motor al ángulo especificado a la velocidad indicada.
-   - `*SETZERO*`: Establece la posición actual como cero.
-   - `*GETPOS*`: Obtiene la posición actual del motor.
-   - `*CALIBRATE*`: Inicia el proceso de calibración moviendo el motor hacia atrás hasta tocar el final de carrera.
-   - `*READBATTERY*`: Lee el nivel de batería del pin analógico.
-   - `*READTEMP*`: Lee la temperatura y humedad del sensor DHT22.
+- `MAX_ANGLE`: Límite de seguridad en grados
+- `factorVoltaje`: Factor de conversión ADC->voltaje
+- `servoOnAngle`: Ángulo para activar el servo
+- `servoOffAngle`: Ángulo para desactivar el servo
 
-### Ejemplos de comandos
+## Comandos Serie
 
-- `*45-50*`: Mueve el motor al ángulo 45 a una velocidad de 50.
 - `*SETZERO*`: Establece la posición actual como cero.
-- `*GETPOS*`: Obtiene la posición actual del motor.
-- `*CALIBRATE*`: Inicia el proceso de calibración.
-- `*READBATTERY*`: Lee el nivel de batería.
-- `*READTEMP*`: Lee la temperatura y humedad.
+- `*GETPOS*`: Obtiene la posición actual.
+- `*CALIBRATE*`: Inicia la calibración del motor.
+- `*READBATTERY*`: Lee el nivel de la batería.
+- `*READTEMP*`: Lee la temperatura y la humedad.
+- `*SERVO-ON*`: Coloca el servo en posición ON.
+- `*SERVO-OFF*`: Coloca el servo en posición OFF.
+
+## Comandos para Control del Motor
+
+Los comandos para el motor siguen el formato: `*ANGULO-VELOCIDAD*`.
+
+Ejemplo:
+
+- `*45-50*`: Gira a 45 grados con velocidad de 50.
+
+### Consideraciones
+
+- El ángulo enviado es absoluto, no relativo.
+- El límite de seguridad (`MAX_ANGLE`) rechaza movimientos superiores.
+- Comandos no válidos imprimen un error y rechazan el movimiento.
 
 **Importante**: Asegúrate de tener cuidado con las conexiones eléctricas y la manipulación del motor.
 
-## Límite de Seguridad
-
-El código incluye un límite de seguridad `MAX_ANGLE` para evitar movimientos que excedan este límite. Si un comando especifica un ángulo mayor a `MAX_ANGLE`, se imprimirá un error y el movimiento será rechazado.
-
-## Modelos 3den OnShape
+## Modelos 3d en OnShape
 
 Los modelos 3d se encuentran en el [link](https://cad.onshape.com/documents/a62f93ff7ced747f6bff1457/w/5efe87a3af445a6ccf31b3ad/e/480793982d3c0177615028ab?renderMode=0&uiState=656f6fc1e612372fc7774d9d)
