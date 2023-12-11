@@ -16,8 +16,8 @@ const int dirPin = 9;      // Pin del step del driver A4988
 const int endstopPin = 10;  // Pin del final de carrera
 
 // Constantes
-const int MAX_ANGLE = 210;  // Límite de seguridad en grados
-const float factorVoltaje = 1; // Factor de conversión ADC->voltaje
+const int MAX_ANGLE = 120;  // Límite de seguridad en grados
+const float factorVoltaje = 0.018; // Factor de conversión ADC->voltaje
 const int servoOnAngle = 25;  // Angulo para servo ON
 const int servoOffAngle = 0;   // Angulo para servo OFF
 
